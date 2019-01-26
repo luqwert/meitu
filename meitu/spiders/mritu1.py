@@ -52,6 +52,10 @@ class Mritu1Spider(scrapy.Spider):
                 item["number"] = response.xpath('/html/body/div[4]/span/text()').extract_first()
                 item["xiezhen_title"] = response.xpath('/html/body/div[7]/ul/li[%d]/p[3]/a/text()' % (i+1) ).extract_first()
                 item["xiezhen_link"] = response.xpath('/html/body/div[7]/ul/li[%d]/p[3]/a/@href' % (i+1) ).extract_first()
+                yield scrapy.Request(item["xiezhen_link"],
+                                     callback=self.parse_pic,
+                                     meta={'b': item}
+                                     )
             # print('小于40写真详情')
         else:
             for i in range(40):
@@ -67,19 +71,21 @@ class Mritu1Spider(scrapy.Spider):
                 item["number"] = response.xpath('/html/body/div[4]/span/text()').extract_first()
                 item["xiezhen_title"] = response.xpath('/html/body/div[7]/ul/li[%d]/p[3]/a/text()' % (i+1) ).extract_first()
                 item["xiezhen_link"] = response.xpath('/html/body/div[7]/ul/li[%d]/p[3]/a/@href' % (i+1) ).extract_first()
+                yield scrapy.Request(item["xiezhen_link"],
+                                     callback=self.parse_pic,
+                                     meta={'b': item}
+                                     )
             # print('大于40写真详情')
             #下一页
             next_url = 'https://www.meituri.com' + response.xpath('//*[@id="pages"]/a[contains(text(), "下一页")]/@href').extract_first()
             # print(next_url)
             yield scrapy.Request(next_url,
                                  callback=self.parse_detail1,
+                                 dont_filter=True,
+                                 meta={'a': item}
                                  )
         # print(item)
-        yield item
-        yield scrapy.Request(item["xiezhen_link"],
-                             callback=self.parse_pic,
-                             meta={'b': item}
-                             )
+
 
     def parse_pic(self, response):
         item = response.meta['b']
