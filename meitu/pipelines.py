@@ -14,7 +14,7 @@ class MeituPipeline(object):
         # self.youma_count = 0
         # self.oumei_count = 0
     def process_item(self, item, spider):
-        # name = item['name']
+        print(item['xiezhen_title'], item['pic_links'])
         dirname1 = 'J:\\写真\\%s\\' % item['name']
         if not os.path.exists(dirname1):
             os.makedirs(dirname1)
@@ -22,15 +22,15 @@ class MeituPipeline(object):
         if not os.path.exists(dirname2):
             os.makedirs(dirname2)
         filename = re.search(r'(?<=/)\d+(?=.jpg)', item['pic_links']).group() + '.jpg'
-        print(filename)
-        if os.path.exists(dirname2 + filename):
-            pass
-        else:
-            with open(dirname2 + filename, 'wb') as f:
+        # print(filename)
+        # if os.path.exists(dirname2 + filename):
+        #     pass
+        # else:
+        with open(dirname2 + filename, 'wb') as f:
 
-                print(dirname2 + filename, item['pic_links'])
-                req = requests.get(item['pic_links']).content
-                f.write(req)
+            # print(dirname2 + filename, item['pic_links'])
+            req = requests.get(item['pic_links']).content
+            f.write(req)
         # print(item)
         self.mritu1_count += 1
         print('已下载 %s, %d:' % (spider.name, self.mritu1_count))
