@@ -6,7 +6,7 @@ from meitu import settings
 
 class Mritu1Spider(scrapy.Spider):
     name = 'mritu1'
-    allowed_domains = ['meituri.com','hywly.com']
+    allowed_domains = ['meituri.com','hywly.com','tujigu.com']
     start_urls = ['https://www.meituri.com/zhongguo/']
 
     def parse(self, response):

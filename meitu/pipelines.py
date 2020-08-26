@@ -15,7 +15,7 @@ class MeituPipeline(object):
         # self.oumei_count = 0
     def process_item(self, item, spider):
         print(item['xiezhen_title'], item['pic_links'])
-        dirname1 = 'J:\\写真\\%s\\' % item['name']
+        dirname1 = 'F:\\写真\\%s\\' % item['name']
         if not os.path.exists(dirname1):
             os.makedirs(dirname1)
         dirname2 = dirname1 + item['xiezhen_title'] + '\\'
