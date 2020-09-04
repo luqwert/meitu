@@ -4,9 +4,10 @@ from meitu.items import MeituItem
 import re
 from meitu import settings
 
+
 class Mritu1Spider(scrapy.Spider):
     name = 'mritu1'
-    allowed_domains = ['meituri.com','hywly.com','tujigu.com']
+    allowed_domains = ['meituri.com', 'hywly.com', 'tujigu.com']
     start_urls = ['https://www.meituri.com/zhongguo/']
 
     def parse(self, response):
@@ -17,7 +18,7 @@ class Mritu1Spider(scrapy.Spider):
                 detail_link,
                 callback=self.parse_detail1,
             )
-        #找到下一页的url地址
+        # 找到下一页的url地址
         # next_url = response.xpath('//a[contains(text(), "下一页")]/@href').extract_first()
         # # print(next_url)
         # a = response.xpath('//*[@id="pages"]/span/text()').extract_first()
@@ -47,8 +48,10 @@ class Mritu1Spider(scrapy.Spider):
                 item["introduction"] = response.xpath('/html/body/div[2]/div[5]/text()').extract()
                 item["tag"] = response.xpath('/html/body/div[2]/div[5]/p//a/text()').extract()
                 item["number"] = response.xpath('/html/body/div[4]/span/text()').extract_first()
-                item["xiezhen_title"] = response.xpath('/html/body/div[7]/ul/li[%d]/p[3]/a/text()' % (i+1) ).extract_first()
-                item["xiezhen_link"] = response.xpath('/html/body/div[7]/ul/li[%d]/p[3]/a/@href' % (i+1) ).extract_first()
+                item["xiezhen_title"] = response.xpath(
+                    '/html/body/div[7]/ul/li[%d]/p[3]/a/text()' % (i + 1)).extract_first()
+                item["xiezhen_link"] = response.xpath(
+                    '/html/body/div[7]/ul/li[%d]/p[3]/a/@href' % (i + 1)).extract_first()
                 yield scrapy.Request(item["xiezhen_link"],
                                      callback=self.parse_pic,
                                      meta={'b': item}
@@ -68,14 +71,16 @@ class Mritu1Spider(scrapy.Spider):
                 item["introduction"] = response.xpath('/html/body/div[2]/div[5]/text()').extract()
                 item["tag"] = response.xpath('/html/body/div[2]/div[5]/p//a/text()').extract()
                 item["number"] = response.xpath('/html/body/div[4]/span/text()').extract_first()
-                item["xiezhen_title"] = response.xpath('/html/body/div[7]/ul/li[%d]/p[3]/a/text()' % (i+1)).extract_first()
-                item["xiezhen_link"] = response.xpath('/html/body/div[7]/ul/li[%d]/p[3]/a/@href' % (i+1)).extract_first()
+                item["xiezhen_title"] = response.xpath(
+                    '/html/body/div[7]/ul/li[%d]/p[3]/a/text()' % (i + 1)).extract_first()
+                item["xiezhen_link"] = response.xpath(
+                    '/html/body/div[7]/ul/li[%d]/p[3]/a/@href' % (i + 1)).extract_first()
                 yield scrapy.Request(item["xiezhen_link"],
                                      callback=self.parse_pic,
                                      meta={'b': item},
                                      )
             # print('大于40写真详情')
-            #下一页
+            # 下一页
             # next_url = 'https://www.meituri.com' + response.xpath('//*[@id="pages"]/a[contains(text(), "下一页")]/@href').extract_first()
             # # print(next_url)
             # yield scrapy.Request(next_url,
@@ -83,7 +88,6 @@ class Mritu1Spider(scrapy.Spider):
             #                      dont_filter=True,
             #                      )
         # print(item)
-
 
     def parse_pic(self, response):
 
@@ -98,7 +102,7 @@ class Mritu1Spider(scrapy.Spider):
         if a != b:
             for i in range(5):
                 # item = MeituItem()
-                item['pic_links'] = response.xpath('/html/body/div[4]/img[%d]/@src' % (i+1)).extract_first()
+                item['pic_links'] = response.xpath('/html/body/div[4]/img[%d]/@src' % (i + 1)).extract_first()
                 yield item
                 # print(item[])
             # print('大于5图片链接已添加')
@@ -110,10 +114,8 @@ class Mritu1Spider(scrapy.Spider):
         else:
             for i in range(number):
                 # item = MeituItem()
-                item['pic_links'] = response.xpath('/html/body/div[4]/img[%d]/@src' % (i+1)).extract_first()
+                item['pic_links'] = response.xpath('/html/body/div[4]/img[%d]/@src' % (i + 1)).extract_first()
                 yield item
                 # print(item)
             # print('小于5图片链接已添加')
         # yield item
-
-
